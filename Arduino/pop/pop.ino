@@ -1,8 +1,8 @@
 //
-// SNAP acoustic recorder
+// Pop acoustic recorder
 //
 // Loggerhead Instruments
-// 2016-2018
+// 2019
 // David Mann
 // 
 // Modified from PJRC audio code
@@ -45,6 +45,7 @@ static boolean printDiags = 0;  // 1: serial print diagnostics; 0: no diagnostic
 #include <TimeLib.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Adafruit_FeatherOLED.h>
 #include <EEPROM.h>
 //#include <TimerOne.h>
 
@@ -53,8 +54,12 @@ static boolean printDiags = 0;  // 1: serial print diagnostics; 0: no diagnostic
 #define CPU_RESTART (*CPU_RESTART_ADDR = CPU_RESTART_VAL);
 
 #define OLED_RESET 4
-Adafruit_SSD1306 display(OLED_RESET);
-#define BOTTOM 55
+#define displayLine1 0
+#define displayLine2 9
+#define displayLine3 18
+#define displayLine4 27
+Adafruit_FeatherOLED display = Adafruit_FeatherOLED();
+#define BOTTOM 25
 
 // set this to the hardware serial port you wish to use
 #define HWSERIAL Serial1
@@ -86,22 +91,16 @@ int gainSetting = 4; //default gain setting; can be overridden in setup file
 int noDC = 0; // 0 = freezeDC offset; 1 = remove DC offset
 
 // Pin Assignments
-const int hydroPowPin = 2;
-
-// AMX
-const int UP = 4;
-const int DOWN = 3;  // new board pin
-//const int DOWN = 5; // old board down pin
-const int SELECT = 8;
-const int displayPow = 20;
-const int ledGreen = 16;
-const int ledRed = 17;
-const int BURN1 = 5;
-const int SDSW = 0;
-const int ledWhite = 21;
-const int usbSense = 6;
-const int vSense = 21; 
-//const int vSense = A14;  // moved to Pin 21 for X1
+#define hydroPowPin 2
+#define UP 4
+#define DOWN 3
+#define SELECT 2
+#define START 5
+#define ledGreen 17
+#define SDSW 10
+#define vSense 16
+#define VMINUS 20
+#define HPF_EN 15
 
 // Pins used by audio shield
 // https://www.pjrc.com/store/teensy3_audio.html
@@ -162,6 +161,7 @@ SnoozeAlarm alarm;
 SnoozeAudio snooze_audio;
 SnoozeBlock config_teensy32(snooze_audio, alarm);
 
+float voltage;
 
 // The file where data is recorded
 #if USE_SDFS==1
@@ -226,25 +226,24 @@ void setup() {
   Wire.begin();
 
   pinMode(hydroPowPin, OUTPUT);
-  pinMode(displayPow, OUTPUT);
-
+  pinMode(VMINUS, OUTPUT);
+  pinMode(HPF_EN, OUTPUT);
   pinMode(vSense, INPUT);
   analogReference(DEFAULT);
-
   digitalWrite(hydroPowPin, HIGH);
-  digitalWrite(displayPow, HIGH);
-
-  pinMode(usbSense, OUTPUT);
-  digitalWrite(usbSense, LOW); // make sure no pull-up
-  pinMode(usbSense, INPUT);
-  
+  digitalWrite(VMINUS, HIGH);
+  digitalWrite(HPF_EN, LOW);
+ 
   //setup display and controls
   pinMode(UP, INPUT);
   pinMode(DOWN, INPUT);
   pinMode(SELECT, INPUT);
+  pinMode(START, INPUT);
   digitalWrite(UP, HIGH);
   digitalWrite(DOWN, HIGH);
   digitalWrite(SELECT, HIGH);  
+  digitalWrite(START, HIGH);
+
 
   //setSyncProvider(getTeensy3Time); //use Teensy RTC to keep time
   t = getTeensy3Time();
@@ -266,9 +265,6 @@ void setup() {
 //  if (printDiags==0){
 //      usbDisable();
 //  }
-  
-  pinMode(usbSense, OUTPUT);  //not using any more, set to OUTPUT
-  digitalWrite(usbSense, LOW); 
 
   cDisplay();
   display.println("Loggerhead");
@@ -283,7 +279,7 @@ void setup() {
     
     while (1) {
       cDisplay();
-      display.println("SD error. Restart.");
+      display.println("SD error");
       displayClock(getTeensy3Time(), BOTTOM);
       display.display();
       delay(1000);  
@@ -369,15 +365,13 @@ void loop() {
       t = getTeensy3Time();
       cDisplay();
       display.println("Next Start");
-      displayClock(startTime, 20);
-      displayClock(t, BOTTOM);
+      displayClock(startTime, displayLine3);
+      displayClock(t, displayLine4);
       display.display();
       //
       //static uint32_t to; if(t >to) Serial.println(t); to=t;
       //
-      if(t >= burnTime){
-        digitalWrite(BURN1, HIGH);
-      }
+
       if(t >= startTime){      // time to start?
         if(noDC==0) {
           audio_freeze_adc_hp(); // this will lower the DC offset voltage, and reduce noise
@@ -412,7 +406,7 @@ void loop() {
 //      Serial.println(queue1.getQueue_dropped());
 //    }
 //  }
-    if(digitalRead(UP)==0 & digitalRead(DOWN)==0){
+    if(digitalRead(START)==0){
       // stop recording
       queue1.end();
       // update wav file header
@@ -579,7 +573,7 @@ void FileInit()
     SdFile::dateTimeCallback(file_date_time);
   #endif
 
-   float voltage = readVoltage();
+  voltage = readVoltage();
    
   sd.chdir(); // only to be sure to start from root
   #if USE_SDFS==1

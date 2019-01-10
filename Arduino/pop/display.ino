@@ -1,7 +1,7 @@
 float mAmpRec = 45;  // actual about 43 mA
 float mAmpSleep = 2.8; // actual about 2.6 mA
-byte nBatPacks = 1;
-float mAhPerBat = 12000.0; // assume 12Ah per battery pack; good batteries should be 14000
+byte nBatPacks = 2;
+float mAhPerBat = 5000.0; // two lithium 5Ah batteries
 
 uint32_t freeMB;
 uint32_t filesPerCard;
@@ -46,13 +46,14 @@ void manualSettings(){
   readEEPROM();
 
   autoStartTime = getTeensy3Time();
+  voltage = readVoltage();
 
 // get free space on cards
 
     cDisplay();
-    display.print("LS1 Init");
+    display.print("Pop Init");
     display.setTextSize(1);
-    display.setCursor(0, 16);
+    display.setCursor(0, displayLine2);
     display.println("Card Free/Total MB");
     
     freeMB = 0; //reset
@@ -142,11 +143,9 @@ void manualSettings(){
           settingsChanged = 0;
           autoStartTime = getTeensy3Time();  //reset autoStartTime
         }
-        display.print("UP+DN->Rec"); 
+        display.print("ST to Start"); 
         // Check for start recording
-        startUp = digitalRead(UP);
-        startDown = digitalRead(DOWN);
-        if(startUp==0 & startDown==0) {
+        if(digitalRead(START)==0) {
           cDisplay();
           writeEEPROM(); //save settings
           display.print("Starting..");
@@ -267,20 +266,21 @@ int updateVal(long curVal, long minVal, long maxVal){
 
 void cDisplay(){
     display.clearDisplay();
+    displayBattery();
     display.setTextColor(WHITE);
-    display.setTextSize(2);
-    display.setCursor(0,0);
+    display.setTextSize(1);
+    display.setCursor(0,displayLine1);
 }
 
 void displaySettings(){
   t = getTeensy3Time();
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(0, 18);
+  display.setCursor(0, displayLine2);
 
   display.print("Rec:");
   display.print(rec_dur);
-  display.println("s ");
+  display.print("s ");
   
   display.print("Sleep:");
   display.print(rec_int);
@@ -342,6 +342,10 @@ void displaySettings(){
   }
 }
 
+void displayBattery(){
+  display.setBattery(voltage);
+  display.renderBattery();
+}
 
 void displayClock(time_t t, int loc){
   display.setTextSize(1);
