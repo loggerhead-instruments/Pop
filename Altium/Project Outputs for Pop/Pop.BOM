@@ -1,0 +1,49 @@
+Bill of Material for 
+On 11/19/2018 at 9:45:48 AM
+
+ Comment             Pattern     Quantity  Components
+------------------------------------------------------------------------------
+ 0.1uF               0402             4    C14, C17, C18, C19           Ceramic Chip Capacitor - Standard 
+ 0x                  3-0603           1    R12                          Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 1.0uF               0402            12    C1, C2, C3, C4, C5, C7, C11  Ceramic Chip Capacitor - Standard 
+                                           C12, C15, C24, C28, C31
+ 100                 3-0603           2    R23, R24                     Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 100k                3-0603           8    R3, R4, R5, R9, R13, R14, R16 Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+                                           R17
+ 100n                0402             2    C22, C29                     Ceramic Chip Capacitor - Standard 
+ 10k                 3-0603           2    R8, R20                      Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 10M                 3-0603           2    R15, R25                     Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 10nF                0402             3    C6, C8, C13                  Ceramic Chip Capacitor - Standard 
+ 10uF                0402             1    C30                          Ceramic Chip Capacitor - Standard 
+ 15n                 0402             2    C16, C27                     Ceramic Chip Capacitor - Standard 
+ 1k                  3-0603           3    R11, R21, R22                Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 1uF                 Tant0805         2    C9, C10                                           
+ 2.2uF               0402             3    C21, C23, C26                Ceramic Chip Capacitor - Standard 
+ 2.49k               3-0603           1    R19                          Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 2k                  3-0603           1    R6                           Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 3.3uF               0402             1    C32                          Ceramic Chip Capacitor - Standard 
+ 330                 3-0603           2    R1, R7                       Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 4.7k                3-0603           2    R26, R27                     Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 40k                 3-0603           1    R2                           Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 68k                 3-0603           1    R18                          Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ 75k                 3-0603           1    R10                          Precision Thick Film Chip Resistor, 10 Ohm to 1M Ohm Range, 1% and 0.5% Tolerance, 0603 Size, 0.063 W 
+ AD8436              AD8436           1    U10                          RMS to DC            
+ ADA4805-1           ADI-RJ-6_N       2    U8, U9                       Single Channel Low Wide Band Noise Operational Amplifier, 80 MHz BW, 13 V/us SR, Industrial, 6-pin SOT23 (RJ-6), Reel 
+ Battery _2mm        HDR_2x1_2mm      2    P8, P9                       Charging Connector   
+ C0603               0603             2    C20, C25                     Ceramic Chip Capacitor - Standard 
+ DIP1                DIP1             1    P10                                               
+ Display             HDR1X4           1    P5                           Header, 4-Pin        
+ Header 2            HDR1X2           2    P12, P18                     Header, 2-Pin        
+ HYDROPHONE          HDR1X3           1    P11                          Header, 3-Pin        
+ LED_0603            Diode0603        2    D1, D2                                            
+ LM27762             SOP12            1    U7                           Pos and Neg Output Charge pump plus LDO 
+ LP3985IM5-3.3       MF05A_N          3    U2, U3, U5                   Micropower, 150mA Low-Noise Ultra Low-Dropout CMOS Voltage Regulator 
+ MCP1700T-1802E/TT   SOT-23-TT3_N     1    U1                           Low Quiescent Current LDO, 3-Pin SOT-23, Extended Temperature, Tape and Reel 
+ MCP73831T-2DCI/OT   SOT-23-OT5_N     1    U4                           Miniature Single-Cell, Fully Integrated Li-Ion, Li-Polymer Charge Management Controller, 4.2V, 5-Pin SOT-23, Industrial Temperature, Tape and Reel 
+ microSD-Molex       microSD_Molex_hinged    1    P3                                                
+ microUSB-vert       MICROUSB-VERT    1    P2                           Molex 105133-0011    
+ PIEZO               HDR1X2           2    P13, P14                     Header, 2-Pin        
+ SGTL5000            QFN32            1    U6                           SGTL5000             
+ Tactile             Tactile-B3U-1000    5    P6, P7, P15, P16, P17                             
+ Teensy 3.2          Teensy3.x        1    P1                                                
+ USB                 HDR_2x1_2mm      1    P4                           Charging Connector   
