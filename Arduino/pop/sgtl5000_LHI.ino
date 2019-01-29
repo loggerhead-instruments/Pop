@@ -460,7 +460,9 @@ bool audio_enable(int fs_mode)
   chipWrite(DAP_AVC_CTRL, 0x0000); //no automatic volume control
   //chipWrite(CHIP_ANA_CTRL, 0x0114);  // lineout mute, headphone mute, no zero cross detectors, line input selected
   chipWrite(CHIP_ANA_CTRL, 0x0014);  // lineout unmute, headphone mute, no zero cross detectors, line input selected
-  chipWrite(CHIP_MIC_CTRL, 0x0000); //microphone off
+  //chipWrite(CHIP_ANA_CTRL, 0x0010);  // lineout unmute, headphone mute, no zero cross detectors, mic input selected
+  //chipWrite(CHIP_MIC_CTRL, 0x0000); //microphone off
+  //chipWrite(CHIP_MIC_CTRL, 0x0001); //microphone +20 dB gain
   chipWrite(CHIP_ANA_ADC_CTRL, 0x0000); // 0 dB gain
   //chipWrite(CHIP_ANA_ADC_CTRL, 0x0100); // -6 dB gain
   

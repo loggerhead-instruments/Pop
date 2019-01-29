@@ -55,9 +55,9 @@ static boolean printDiags = 0;  // 1: serial print diagnostics; 0: no diagnostic
 
 #define OLED_RESET 4
 #define displayLine1 0
-#define displayLine2 9
-#define displayLine3 18
-#define displayLine4 27
+#define displayLine2 8
+#define displayLine3 16
+#define displayLine4 25
 Adafruit_FeatherOLED display = Adafruit_FeatherOLED();
 #define BOTTOM 25
 
@@ -86,12 +86,10 @@ AudioConnection          patchCord1(i2s2, 0, queue1, 0);
 AudioControlSGTL5000     sgtl5000_1;     //xy=265,212
 // GUItool: end automatically generated code
 
-const int myInput = AUDIO_INPUT_LINEIN;
-int gainSetting = 4; //default gain setting; can be overridden in setup file
+int gainSetting = 10; //default gain setting; can be overridden in setup file
 int noDC = 0; // 0 = freezeDC offset; 1 = remove DC offset
 
 // Pin Assignments
-#define hydroPowPin 2
 #define UP 4
 #define DOWN 3
 #define SELECT 2
@@ -100,6 +98,7 @@ int noDC = 0; // 0 = freezeDC offset; 1 = remove DC offset
 #define SDSW 10
 #define vSense 16
 #define VMINUS 20
+#define VPLUS 21
 #define HPF_EN 15
 
 // Pins used by audio shield
@@ -225,12 +224,12 @@ void setup() {
   
   Wire.begin();
 
-  pinMode(hydroPowPin, OUTPUT);
+  pinMode(VPLUS, OUTPUT);
   pinMode(VMINUS, OUTPUT);
   pinMode(HPF_EN, OUTPUT);
   pinMode(vSense, INPUT);
   analogReference(DEFAULT);
-  digitalWrite(hydroPowPin, HIGH);
+  digitalWrite(VPLUS, HIGH);
   digitalWrite(VMINUS, HIGH);
   digitalWrite(HPF_EN, LOW);
  
@@ -365,7 +364,7 @@ void loop() {
       t = getTeensy3Time();
       cDisplay();
       display.println("Next Start");
-      displayClock(startTime, displayLine3);
+      displayClock(startTime, displayLine2);
       displayClock(t, displayLine4);
       display.display();
       //
@@ -447,7 +446,8 @@ void loop() {
         snooze_second = ss;
         
         if( (snooze_hour * 3600) + (snooze_minute * 60) + snooze_second >=10){
-            digitalWrite(hydroPowPin, LOW); //hydrophone off
+            digitalWrite(VPLUS, LOW); //hydrophone off
+            digitalWrite(VMINUS, LOW);
             audio_power_down();  // when this is activated, seems to occassionally have trouble restarting; no LRCLK signal or RX on Teensy
 
             if(printDiags){
@@ -467,7 +467,8 @@ void loop() {
             // Waking up
            // if (printDiags==0) usbDisable();
 
-            digitalWrite(hydroPowPin, HIGH); // hydrophone on
+            digitalWrite(VPLUS, HIGH); // hydrophone on
+            digitalWrite(VMINUS, HIGH);
             delay(300);  // give time for Serial to reconnect to USB
             audio_power_up();  // when use audio_power_down() before sleeping, does not always get LRCLK. This did not fix.  
          }
@@ -677,7 +678,7 @@ void AudioInit(int ifs){
   Wire.begin();
   audio_enable(ifs);
   
-  sgtl5000_1.lineInLevel(gainSetting);  //default = 4
+  sgtl5000_1.lineInLevel(gainSetting);  
 
   switch(gainSetting){
     case 0: gainDb = -20 * log10(3.12 / 2.0); break;
